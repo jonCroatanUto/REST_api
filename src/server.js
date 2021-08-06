@@ -13,10 +13,11 @@ app.use(helmet());
 app.use(json());
 app.use(morgan("dev"));
 
-//app.use("/users", userRouter);
-app.get("/",(req,res)=>{
-    res.status(200).send({
-        message:"hello world default",
-    });
-});
+app.use("/users", userRouter);
+// app.get("/",(req,res)=>{
+//     res.status(200).send({
+        
+//         message:`Hello world`,
+//     });
+// });
 module.exports=app;

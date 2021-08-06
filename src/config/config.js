@@ -15,7 +15,7 @@ const {
 const config = {
     development:{
         app:{
-            port:PORT || 4001
+            port:PORT || 4000
         },
         db:{
             url:MONGO_DB_URL_DEVELOPMENT
@@ -26,7 +26,7 @@ const config = {
     },
     test:{
         app:{
-            port:PORT || 4001
+            port:PORT || 4000
         },
         db:{
             url:MONGO_DB_URL_TEST
@@ -37,7 +37,7 @@ const config = {
     },
     production:{
         app:{
-            port:PORT || 4001
+            port:PORT || 4000
         },
         db:{
             url:MONGO_DB_URL_PRODUCTION
