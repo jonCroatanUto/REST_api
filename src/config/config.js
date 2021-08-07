@@ -22,6 +22,9 @@ const config = {
         },
         encrypt:{
             salt:ENCRYPTION_SALT_DEVELOPMENT
+        },
+        accessToken:{
+            tokkenKey:ACCESS_TOKEN_SECRET
         }
     },
     test:{
@@ -33,6 +36,9 @@ const config = {
         },
         encrypt:{
             salt:ENCRYPTION_SALT_DEVELOPMENT
+        },
+        accessToken:{
+            tokkenKey:ACCESS_TOKEN_SECRET
         }
     },
     production:{
@@ -44,6 +50,9 @@ const config = {
         },
         encrypt:{
             salt:ENCRYPTION_SALT_PRODUCTION
+        },
+        accessToken:{
+            tokkenKey:ACCESS_TOKEN_SECRET
         }
     },
 }
