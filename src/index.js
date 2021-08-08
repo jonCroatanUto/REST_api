@@ -1,10 +1,10 @@
 const app = require("./server");
 const  config  = require("./config");
 const connect = require("./db");
-const { urlencoded } = require("body-parser");
+// const { urlencoded } = require("body-parser");
 
-app.set('tokken_key', config.accessToken.tokkenKey);
-app.use(urlencoded({ extended: true }));
+// app.set('tokken_key', config.accessToken.tokkenKey);
+// app.use(urlencoded({ extended: true }));
 
 connect().then(async ()=>{
     //config.logger.info("DB connected!");

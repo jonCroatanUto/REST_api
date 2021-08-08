@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
 const { isEmail } = require("validator");
-
+const bcrypt = require("bcrypt") ;
 
 const userSchema = Schema({
         firstName:{
@@ -28,7 +28,17 @@ const userSchema = Schema({
     },{
         timestamps:true
 })
+userSchema.statics.encryptPassword = async (password)=>{
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt)
+};
+userSchema.statics.comparePassword = async (password,recivePassword)=>{
 
+   const pssExist = await bcrypt.compare(password,recivePassword);
+   if(pssExist){
+       return password;
+   }
+};
 const User = mongoose.model("User",userSchema );
 
 module.exports = User;

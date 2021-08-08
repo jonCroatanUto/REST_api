@@ -2,9 +2,9 @@ const express= require("express");
 const helmet = require("helmet");
 const { json } = require("body-parser");
 const morgan = require("morgan");
-const jwt = require('jsonwebtoken');
 
-const { userRouter } = require("./routes/user-route");
+
+const { userRouter } = require("./routes");
 
 const app= express();
 
@@ -14,6 +14,8 @@ app.use(morgan("dev"));
 
 
 app.use("/users", userRouter);
+app.use("/auth", userRouter);
+
 
 
 // app.get("/",(req,res)=>{

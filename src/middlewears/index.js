@@ -1,5 +1,5 @@
-const authMiddleweare = require("./auth_middleweare");
+const userExistsMiddleweare = require("./middleweares");
 
 module.exports={
-    authMiddleweare:authMiddleweare
+    userExistsMiddleweare:userExistsMiddleweare
 }
