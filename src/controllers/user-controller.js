@@ -34,6 +34,31 @@ async function register(req,res){
 
 }
 
+
+
+async function login(req,res){
+    const {email, password}=req.body;
+    try{
+        const userFound = await db.User.findOne({email:email});
+        const matchPassword = await db.User.comparePassword(password,userFound.password);
+        if(userFound && matchPassword) {
+            
+            return res.status(200).send(`Welcome ${userFound.firstName}`);
+            
+        }else if(!userFound){
+            return res.status(400).send(`The user not exist`);
+        }else if(!matchPassword){
+            return res.status(400).send(`The password doesn't match`);
+        }
+        
+    }catch(err){
+        return res.status(500).send({
+            error:err.message,
+        })
+    }
+    
+}
+
 async function getUsers(req,res){
     try{
     const users = await db.User.find({});
@@ -49,34 +74,60 @@ async function getUsers(req,res){
         })
     }
 
-}
+};
 
-
-async function login(req,res){
-    const {email, password}=req.body;
+async function getUser(req,res){
     try{
-    const userFound = await db.User.findOne({email:email});
-    const matchPassword = await db.User.comparePassword(password,userFound.password);
-        if(userFound && matchPassword) {
-
-            return res.status(200).send(`Welcome ${userFound.firstName}`);
-
-        }else if(!userFound){
-            return res.status(400).send(`The user not exist`);
-        }else if(!matchPassword){
-            return res.status(400).send(`The password doesn't match`);
-        }
-    
+        const userGetted = await db.User.findById(req.params.id);
+       
+        return res.status(200).send({
+                user:userGetted,
+            })
+       
+        
     }catch(err){
         return res.status(500).send({
-            error:err.message,
+            error:err,
         })
     }
+};
+// ,function (err) {
+//     if (err) return handleError(err)}
 
-}
+async function delete_user(req, res){
+    try{
+         await db.User.deleteOne({_id:req.params.id});
+       
+            return res.status(200).send({
+                message:`The user  had been deleted`,
+            })    
+    }catch(err){
+        return res.status(500).send({
+            error:err,
+        })
+    }
+};
+async function update_user(req,res){
+    console.log("update in");
+    try{
+         await db.User.updateOne({_id:req.params.id}, req.body, {new:true});
+       
+            return res.status(200).send({
+                message:`The user ${req.body.firstName} had been changed`,
+            })    
+    }catch(err){
+        console.log("estoy en el error");
+        return res.status(500).send({
+            error:err,
+        })
+    }
+};
 
 module.exports={
     register:register,
+    login:login,
     getUsers:getUsers,
-    login:login
+    getUser:getUser,
+    delete_user:delete_user,
+    update_user:update_user
 }

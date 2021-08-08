@@ -1,5 +1,9 @@
-const userExistsMiddleweare = require("./middleweares");
+const {
+    userExistsMiddleweare,
+    userNotExistsMiddleweare
+} = require("./middleweares");
 
 module.exports={
-    userExistsMiddleweare:userExistsMiddleweare
+    userExistsMiddleweare:userExistsMiddleweare,
+    userNotExistsMiddleweare:userNotExistsMiddleweare
 }

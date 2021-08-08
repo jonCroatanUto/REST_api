@@ -14,7 +14,7 @@ app.use(morgan("dev"));
 
 
 app.use("/users", userRouter);
-app.use("/auth", userRouter);
+
 
 
 
