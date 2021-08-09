@@ -23,7 +23,6 @@ async function register(req,res){
 
     return res.status(200).send({
         message:"user created",
-        tokken:tokken,
         data:{
             id:_id
         }
@@ -39,7 +38,9 @@ async function register(req,res){
 async function refreshTokken(req, res, next){
     const { email,refreshTokken }=req.body;
     try{
-        if(refreshTokken in sessionData.refreshTokens && sessionData.refreshTokens[refreshTokken]===email){
+        if(refreshTokken in sessionData.refreshTokens && 
+            sessionData.refreshTokens[refreshTokken]===email
+            ){
             const accessTokken = generateTokken({email:email});
             return res.status(200).send({
                 accessTokken:accessTokken,
@@ -61,7 +62,7 @@ async function login(req,res){
         const matchPassword = await db.User.comparePassword(password,userFound.password);
         if(userFound) {
             if(matchPassword){
-                const accessTokken = generateTokken({email:userFound.email});
+                const accessTokken = generateTokken({email:email});
                 const refreshTokken= randTokken.generate(256);
 
                 sessionData.refreshTokens[refreshTokken]=userFound.email;

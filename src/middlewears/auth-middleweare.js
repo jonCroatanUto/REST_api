@@ -1,4 +1,4 @@
-const { verifyTokken } = require("../services/auth")
+const { verifyTokken } = require("../services/auth/verify-acces-tokken")
 async function authMiddleweare(req,res,next){
     try{
         if(req.headers.authorization &&
@@ -10,7 +10,8 @@ async function authMiddleweare(req,res,next){
         }
 
     }catch(err){
-        return res.status(401).send("not auth")
+        return res.status(401).send({
+            "error":err});
     }
 }
 
