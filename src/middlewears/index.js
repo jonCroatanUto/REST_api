@@ -1,7 +1,7 @@
 const {
     userExistsMiddleweare,
     userNotExistsMiddleweare
-} = require("./middleweares");
+} = require("./user-middleweares");
 
 module.exports={
     userExistsMiddleweare:userExistsMiddleweare,

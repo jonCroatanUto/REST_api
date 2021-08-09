@@ -4,7 +4,7 @@ const { json } = require("body-parser");
 const morgan = require("morgan");
 
 
-const { userRouter } = require("./routes");
+const { userRouter, movieRouter, personRouter } = require("./routes");
 
 const app= express();
 
@@ -14,6 +14,8 @@ app.use(morgan("dev"));
 
 
 app.use("/users", userRouter);
+app.use("/movies", movieRouter);
+app.use("/persons", personRouter);
 
 
 
