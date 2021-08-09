@@ -1,6 +1,10 @@
 const db = require("../models");
-const jwt = require('jsonwebtoken');
-const  config  = require("../config");
+const { generateTokken } = require("../services/auth/generate-tokken")
+//const jwt = require('jsonwebtoken');
+//const  config  = require("../config");
+const { sessionData } = require("../session/session");
+const randTokken = require("rand-token");
+
 
 
 async function register(req,res){
@@ -15,9 +19,7 @@ async function register(req,res){
             password:await db.User.encryptPassword(password),
     });
 
-    const tokken=jwt.sign({id:_id},config.accessToken.tokkenKey,{
-        expiresIn:86400 //24 hours
-    })
+
 
     return res.status(200).send({
         message:"user created",
@@ -34,21 +36,46 @@ async function register(req,res){
 
 }
 
-
+async function refreshTokken(req, res, next){
+    const { email,refreshTokken }=req.body;
+    try{
+        if(refreshTokken in sessionData.refreshTokens && sessionData.refreshTokens[refreshTokken]===email){
+            const accessTokken = generateTokken({email:email});
+            return res.status(200).send({
+                accessTokken:accessTokken,
+                refreshTokken:refreshTokken,
+                message:`Welcome ${email}`,
+            })
+        }
+    }catch(err){
+        return res.status(401).send({
+            error:err,
+        })
+    }
+}
 
 async function login(req,res){
     const {email, password}=req.body;
     try{
         const userFound = await db.User.findOne({email:email});
         const matchPassword = await db.User.comparePassword(password,userFound.password);
-        if(userFound && matchPassword) {
+        if(userFound) {
+            if(matchPassword){
+                const accessTokken = generateTokken({email:userFound.email});
+                const refreshTokken= randTokken.generate(256);
+
+                sessionData.refreshTokens[refreshTokken]=userFound.email;
+                return res.status(200).send({
+                    accessTokken:accessTokken,
+                    refreshTokken:refreshTokken,
+                    message:`Welcome ${userFound.firstName}`,
+                });
+            }else{
+                return res.status(400).send(`The password doesn't match`);
+            }
             
-            return res.status(200).send(`Welcome ${userFound.firstName}`);
-            
-        }else if(!userFound){
+        }else{
             return res.status(400).send(`The user not exist`);
-        }else if(!matchPassword){
-            return res.status(400).send(`The password doesn't match`);
         }
         
     }catch(err){
@@ -129,5 +156,6 @@ module.exports={
     getUsers:getUsers,
     getUser:getUser,
     delete_user:delete_user,
-    update_user:update_user
+    update_user:update_user,
+    refreshTokken:refreshTokken
 }
